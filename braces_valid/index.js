@@ -21,99 +21,35 @@ const expected3 = false;
  * @returns {boolean} Whether the given strings braces are valid.
  */
 function bracesValid(str) {
-    let pBalance = 0;
-    let cBalance = 0;
-    let sBalance = 0;
     let tempStr = "";
     let bArr = ['[', '{', '(', ')', '}', ']'];
     let openB  = '';
-    let openInd = 0;
     for (let i = 0; i < str.length; i++) {
+
         if (bArr.includes(str[i])) {
             tempStr += str[i]
         }
         console.log(tempStr)
+
         if (str[i] === ')') {
             console.log("inside () check")
             openB = '('
-            openInd = 0;
-            for (let j = 0; j < tempStr.length; j++) {
-                console.log("tempStr[j]:", tempStr[j])
-                if (tempStr[j] === openB) {
-                    openInd = j;
-                    console.log("openInd:", openInd)
-                }
-            }
-            let ts2 =  tempStr.slice(openInd);
-            console.log("ts2 :", ts2, " --- tempStr:", tempStr)
-            for (let j = 0; j <ts2.length; j++) {
-                switch(ts2[j]) {
-                    case '(':
-                        pBalance++
-                        break;
-                    case '{':
-                        cBalance++
-                        break;
-                    case '[':
-                        sBalance++
-                        break;
-                    case ')':
-                        pBalance--
-                        break;
-                    case '}':
-                        cBalance--
-                        break;
-                    case ']':
-                        sBalance--
-                        break;
-                }
-            }
-            if (pBalance !== 0 || cBalance !== 0 || sBalance !== 0) {
-                return false;
+            let openInd = innerCheck(openB, tempStr)
+            if (openInd === false) {
+                return false
             }
             else {
                 tempStr = tempStr.slice(0, openInd);
                 console.log("tempStr after slice:", tempStr)
-                pBalance = sBalance  = cBalance = 0;
             }
         } 
-        if (str[i] === '}') {
+
+        else if (str[i] === '}') {
             console.log("inside {} check")
             openB = '{'
-            openInd = 0;
-            for (let j = 0; j < tempStr.length; j++) {
-                console.log("tempStr[j]:", tempStr[j])
-                if (tempStr[j] === openB) {
-                    openInd = j;
-                    console.log("openInd:", openInd)
-                }
-            }
-            let ts2 =  tempStr.slice(openInd);
-            console.log("ts2 :", ts2, " --- tempStr:", tempStr)
-            for (let j = 0; j <ts2.length; j++) {
-                switch(ts2[j]) {
-                    case '(':
-                        pBalance++
-                        break;
-                    case '{':
-                        cBalance++
-                        break;
-                    case '[':
-                        sBalance++
-                        break;
-                    case ')':
-                        pBalance--
-                        break;
-                    case '}':
-                        cBalance--
-                        break;
-                    case ']':
-                        sBalance--
-                        break;
-                }
-            }
-            if (pBalance !== 0 || cBalance !== 0 || sBalance !== 0) {
-                return false;
+            let openInd = innerCheck(openB, tempStr)
+            if (openInd === false) {
+                return false
             }
             else {
                 tempStr = tempStr.slice(0, openInd);
@@ -121,43 +57,13 @@ function bracesValid(str) {
                 pBalance = sBalance  = cBalance = 0;
             }
         } 
-        if (str[i] === ']') {
+
+        else if (str[i] === ']') {
             console.log("inside [] check")
             openB = '['
-            openInd = 0;
-            for (let j = 0; j < tempStr.length; j++) {
-                console.log("tempStr[j]:", tempStr[j])
-                if (tempStr[j] === openB) {
-                    openInd = j;
-                    console.log("openInd:", openInd)
-                }
-            }
-            let ts2 =  tempStr.slice(openInd);
-            console.log("ts2 :", ts2, " --- tempStr:", tempStr)
-            for (let j = 0; j <ts2.length; j++) {
-                switch(ts2[j]) {
-                    case '(':
-                        pBalance++
-                        break;
-                    case '{':
-                        cBalance++
-                        break;
-                    case '[':
-                        sBalance++
-                        break;
-                    case ')':
-                        pBalance--
-                        break;
-                    case '}':
-                        cBalance--
-                        break;
-                    case ']':
-                        sBalance--
-                        break;
-                }
-            }
-            if (pBalance !== 0 || cBalance !== 0 || sBalance !== 0) {
-                return false;
+            let openInd = innerCheck(openB, tempStr)
+            if (openInd === false) {
+                return false
             }
             else {
                 tempStr = tempStr.slice(0, openInd);
@@ -166,10 +72,55 @@ function bracesValid(str) {
             }
         } 
     }
-    console.log(tempStr)
+
+    console.log("Temp String:" + tempStr)
     console.log(tempStr.length)
     return (tempStr.length > 0 ? false:true);
 }
+
+function innerCheck(openB, tempStr) {
+    let pBalance = 0;
+    let cBalance = 0;
+    let sBalance = 0;
+    let openInd = 0;
+    for (let j = 0; j < tempStr.length; j++) {
+        console.log("tempStr[j]:", tempStr[j])
+        if (tempStr[j] === openB) {
+            openInd = j;
+            console.log("openInd:", openInd)
+        }
+    }
+    let ts2 =  tempStr.slice(openInd);
+    console.log("ts2 :", ts2, " --- tempStr:", tempStr)
+    for (let j = 0; j <ts2.length; j++) {
+        switch(ts2[j]) {
+            case '(':
+                pBalance++
+                break;
+            case '{':
+                cBalance++
+                break;
+            case '[':
+                sBalance++
+                break;
+            case ')':
+                pBalance--
+                break;
+            case '}':
+                cBalance--
+                break;
+            case ']':
+                sBalance--
+                break;
+        }
+    }
+    // if (pBalance !== 0 || cBalance !== 0 || sBalance !== 0) {
+    //     return false;
+    // }
+    // return openInd;
+    return (pBalance !== 0 || cBalance !== 0 || sBalance !== 0 ? false : openInd)
+}
+
 
 console.log(bracesValid(str1))
 console.log(bracesValid(str2))
